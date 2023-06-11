@@ -1,17 +1,24 @@
 import React from 'react';
 import shortid from 'shortid';
-import PropTypes from 'prop-types';
 
 import { FilterField } from './Filter.styled';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeFilter } from 'redux/phonebookSlice';
 
 const filterId = shortid.generate();
 
-export const Filter = ({ filter, onChange }) => {
+export const Filter = () => {
+  const filter = useSelector(state => state.phonebook.filter);
+  const dispatch = useDispatch();
+
+  const handleChange = e => {
+    dispatch(changeFilter(e.currentTarget.value));
+  };
   return (
     <FilterField>
       <label htmlFor={filterId}>Find contacts by name</label>
       <input
-        onChange={onChange}
+        onChange={handleChange}
         type="text"
         name="filter"
         id={filterId}
@@ -20,9 +27,4 @@ export const Filter = ({ filter, onChange }) => {
       />
     </FilterField>
   );
-};
-
-Filter.propTypes = {
-  filter: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
 };
